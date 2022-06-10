@@ -18,7 +18,7 @@ Plugin 'tpope/vim-fugitive'
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
 " Git plugin not hosted on GitHub
-Plugin 'git://git.wincent.com/command-t.git'
+" Plugin 'git://git.wincent.com/command-t.git' "
 " git repos on your local machine (i.e. when working on your own plugin)
 " Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
@@ -30,9 +30,17 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'sonph/onehalf'
-Plugin 'tikhomirov/vim-glsl'
-Plugin 'derekwyatt/vim-scala'
+"Plugin 'sonph/onehalf'
+"Plugin 'sonph/onehalf.vim'
+"Plugin 'joshdick/onedark.vim'
+Plugin 'morhetz/gruvbox'
+"Plugin 'tikhomirov/vim-glsl'
+"Plugin 'derekwyatt/vim-scala'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+"Plugin 'frazrepo/vim-rainbow'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'airblade/vim-gitgutter'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -52,13 +60,12 @@ filetype plugin indent on    " required
 " Helps force plugins to load correctly when it is turned back on below
 filetype off
 
-" TODO: Load plugins here (pathogen or vundle)
+" let g:rainbow_active = 1
 
 " Turn on syntax highlighting
 syntax on
 
-" For plugins to load correctly
-filetype plugin indent on
+" For plugins to load correctly filetype plugin indent on
 
 " TODO: Pick a leader key
 " let mapleader = ","
@@ -82,9 +89,9 @@ set encoding=utf-8
 set wrap
 set textwidth=79
 set formatoptions=tcqrn1
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set noshiftround
 
@@ -101,11 +108,17 @@ nnoremap k gk
 " Allow hidden buffers
 set hidden
 
+" Add column highlighting on column 80.
+set colorcolumn=80
+
 " Rendering
 set ttyfast
 
 " Status bar
 set laststatus=2
+
+" Fold column is nice, use it :D
+set foldcolumn=1
 
 " Last line
 set showmode
@@ -121,10 +134,16 @@ set smartcase
 set showmatch
 map <leader><space> :let @/=''<cr> " clear search
 
+" Updates vim every 200 ms (for stuff like git-gutter)
+set updatetime=200
+
 " Remap help key.
 inoremap <F1> <ESC>:set invfullscreen<CR>a
 nnoremap <F1> :set invfullscreen<CR>
 vnoremap <F1> :set invfullscreen<CR>
+
+" Remap Crtl - f to fuzzy finder.
+nnoremap <C-f> :Files <ENTER>
 
 " Textmate holdouts
 
@@ -142,10 +161,11 @@ map <leader>l :set list!<CR> " Toggle tabs and EOL
 set laststatus=2
 
 " Color scheme (terminal)
-set t_Co=256
+"set t_Co=256
+"let g:solarized_termcolors=256
+"let g:solarized_termtrans=1
+" Gruvbox settings:
 set background=dark
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-" put https://raw.github.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-" in ~/.vim/colors/ and uncomment:
-colorscheme murphy 
+let g:airline_theme='bubblegum'
+let g:gruvbox_contrast_dark = 'soft'
+colorscheme gruvbox
