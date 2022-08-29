@@ -118,7 +118,10 @@ set ttyfast
 set laststatus=2
 
 " Fold column is nice, use it :D
-set foldcolumn=1
+set foldcolumn=0
+set foldmethod=indent
+set foldlevel=10
+set foldnestmax=1
 
 " Last line
 set showmode
@@ -144,6 +147,14 @@ vnoremap <F1> :set invfullscreen<CR>
 
 " Remap Crtl - f to fuzzy finder.
 nnoremap <C-f> :Files <ENTER>
+nnoremap <C-g> :BLines <ENTER>
+
+" Scroll without moving cursor
+map <Down> <C-e>
+map <Up> <C-y>
+
+map gr :vimgrep  **/*.{c,h} <Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+map gc :e  %<.
 
 " Textmate holdouts
 
@@ -160,6 +171,9 @@ map <leader>l :set list!<CR> " Toggle tabs and EOL
 " Needed for airline?
 set laststatus=2
 
+" Should be used as :Diff in the interpreter
+command Diff GitGutterDiffOrig
+
 " Color scheme (terminal)
 "set t_Co=256
 "let g:solarized_termcolors=256
@@ -167,5 +181,5 @@ set laststatus=2
 " Gruvbox settings:
 set background=dark
 let g:airline_theme='bubblegum'
-let g:gruvbox_contrast_dark = 'soft'
+let g:gruvbox_contrast_dark='medium'
 colorscheme gruvbox
