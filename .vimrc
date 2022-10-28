@@ -42,6 +42,22 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
 
+" Sneak: The missing motion!
+Plugin 'justinmk/vim-sneak'
+
+" Adds a context header while editing.
+Bundle 'wellle/context.vim'
+
+" For Language Server
+" Plugin 'prabirshrestha/vim-lsp'
+" Plugin 'mattn/vim-lsp-settings'
+
+" For autocomplete
+" Plugin 'prabirshrestha/asyncomplete.vim'
+" Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+" Plugin 'Shougo/ddc.vim'
+" Plugin 'shun/ddc-vim-lsp'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -74,7 +90,19 @@ syntax on
 set modelines=0
 
 " Show line numbers
-set number
+" set number
+
+" Use hybrid line numbers
+" set number relativenumber
+
+" Use auto toggled numbers
+:set number
+
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+:  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+:augroup END
 
 " Show file stats
 set ruler
@@ -123,9 +151,16 @@ set foldmethod=indent
 set foldlevel=10
 set foldnestmax=1
 
+" Context variables:
+let g:context_presenter = 'vim-popup'
+let g:context_max_per_indent=5
+
 " Last line
 set showmode
 set showcmd
+
+" highlight current line
+set cursorline
 
 " Searching
 nnoremap / /\v
@@ -153,8 +188,12 @@ nnoremap <C-g> :BLines <ENTER>
 map <Down> <C-e>
 map <Up> <C-y>
 
-map gr :vimgrep  **/*.{c,h} <Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+map gr "ay :vimgrep  **/*.{c,h} <Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>"<C-R>a"
 map gc :e  %<.
+
+" Remap copy and paste to clipboard:
+map <C-c> "+y
+map <C-p> "+p
 
 " Textmate holdouts
 
@@ -171,8 +210,22 @@ map <leader>l :set list!<CR> " Toggle tabs and EOL
 " Needed for airline?
 set laststatus=2
 
+" The following maps and scripts allows me to keep pressing '+' and '-' after
+" Ctrl+W '+' and Ctrl+W '-'.
+nmap <C-W>+ <C-W>+<SID>ws
+nmap <C-W>- <C-W>-<SID>ws
+nn <script> <SID>ws+ <C-W>+<SID>ws
+nn <script> <SID>ws- <C-W>-<SID>ws
+nmap <C-W>< <C-W><<SID>ws
+nmap <C-W>> <C-W>><SID>ws
+nn <script> <SID>ws< <C-W><<SID>ws
+nn <script> <SID>ws> <C-W>><SID>ws
+nmap <SID>ws <Nop>
+
 " Should be used as :Diff in the interpreter
 command Diff GitGutterDiffOrig
+command CapitalComment :vimgrep /\/\*\s[A-Z]\C/ **/*.{c,h}
+command WhiteSpace :vimgrep "\s$"" **/*.{c,h}
 
 " Color scheme (terminal)
 "set t_Co=256
@@ -183,3 +236,12 @@ set background=dark
 let g:airline_theme='bubblegum'
 let g:gruvbox_contrast_dark='medium'
 colorscheme gruvbox
+
+" Color groups for trailing white space and long lones
+highlight TrailingWhiteSpace ctermbg=yellow guibg=yellow
+highlight LongLines ctermbg=yellow guibg=yellow ctermfg=black
+
+" It's really annoying that this only works for two groups. even with
+" matchadd()
+autocmd InsertLeave * match TrailingWhiteSpace /\s\+$/
+autocmd InsertLeave * 2mat LongLines /\%>80v.\+/
